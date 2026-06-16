@@ -1,2 +1,24 @@
 # music-industry-analytics-platform
-End-to-end analytics platform for music industry data using Python, PostgreSQL, dbt, and Streamlit.
+
+## GOAL
+End-to-end analytics platform for music industry data 
+
+## Tech Stack
+- Pyhton
+- PostgreSQL
+- SQLAlchemy
+- dbt
+- Stramlit
+- Git/Github
+
+## Architecture
+
+Music API
+    ↓
+Python ETL
+    ↓
+PostgreSQL
+    ↓
+Analytics Models
+    ↓
+Dashboard
