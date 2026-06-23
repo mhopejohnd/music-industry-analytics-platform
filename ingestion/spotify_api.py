@@ -51,19 +51,41 @@ def get_artist_albums(token, artist_id): #get albums for an artist
 
     query_url = url + query
     result = get(query_url, headers=headers)
-    # json_result = json.loads(result.content)["items"]
     data = result.json()
 
-    print("Status:", result.status_code)
-    print(data)
+    # print("Status:", result.status_code)
+    # print(data)
+
+    return data
+
+def get_album_tracks(token, album_id): #get tracks for an album
+    url = f"https://api.spotify.com/v1/albums/{album_id}/tracks"
+    headers = get_auth_header(token)
+    query = "?limit=50"
+
+    query_url = url + query
+    result = get(query_url, headers=headers)
+    data = result.json()
+
+    # print("Status:", result.status_code)
+    # print(data)
 
     return data
 
 
+
 token = get_token()
+
 result = search_for_artist(token, "Olivia Rodrigo")
 artist_id = result["id"]
 # albums = get_artist_albums(token, artist_id)
 albums= get_artist_albums(token, artist_id)
+album_lst = []
+# print("Albums for artist:", result["name"])
 for album in albums["items"]:
-    print(album["name"], album["release_date"])
+    album_lst.append(album["name"])
+
+# print("Albums:", album_lst)
+# print(artist_id)
+
+print(get_album_tracks(token, album_id=album_lst[0])) # Example album ID
