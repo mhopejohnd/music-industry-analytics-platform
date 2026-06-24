@@ -51,12 +51,22 @@ def get_artist_albums(token, artist_id): #get albums for an artist
 
     query_url = url + query
     result = get(query_url, headers=headers)
-    data = result.json()
+    albums = result.json()['items']
 
     # print("Status:", result.status_code)
     # print(data)
 
-    return data
+    return [
+        {
+            "album_id": album["id"],
+            "album_name": album["name"],
+            "release_date": album["release_date"],
+            "album_type": album["album_type"],
+            "total_tracks": album["total_tracks"],
+            "artist_id": artist_id
+            }
+        for album in albums
+    ]
 
 def get_album_tracks(token, album_id): #get tracks for an album
     url = f"https://api.spotify.com/v1/albums/{album_id}/tracks"
@@ -65,27 +75,60 @@ def get_album_tracks(token, album_id): #get tracks for an album
 
     query_url = url + query
     result = get(query_url, headers=headers)
-    data = result.json()
+    tracks = result.json()['items']
 
     # print("Status:", result.status_code)
     # print(data)
 
-    return data
+    return [
+        {
+            "track_id": track["id"],
+            "track_name": track["name"],
+            "track_number": track["track_number"],
+            "duration_ms": track["duration_ms"],
+            "album_id": album_id
+        }
+        for track in tracks
+    ]
 
+
+def search_artist_and_get_tracks(artist_name):
+    # token = get_token()
+    artist = search_for_artist(token, artist_name)
+    if not artist:
+        return None
+    artist_id = artist["id"]
+
+    albums = get_artist_albums(token, artist_id)
+    all_tracks = []
+
+    for album in albums:
+        album_id = album["album_id"]
+        tracks = get_album_tracks(token, album_id)
+        all_tracks.extend(tracks)
+
+    return {
+        "artist": artist,
+        "albums": albums,
+        "tracks": all_tracks
+    }
 
 
 token = get_token()
 
-result = search_for_artist(token, "Olivia Rodrigo")
-artist_id = result["id"]
-# albums = get_artist_albums(token, artist_id)
-albums= get_artist_albums(token, artist_id)
-album_lst = []
-# print("Albums for artist:", result["name"])
-for album in albums["items"]:
-    album_lst.append(album["name"])
+# artist = search_for_artist(token, "Olivia Rodrigo")
+# artist_id = artist["id"]
 
-# print("Albums:", album_lst)
-# print(artist_id)
+# albums= get_artist_albums(token, artist_id)
+# album_id = albums[0]["album_id"]  # Get the first album's ID
 
-print(get_album_tracks(token, album_id=album_lst[0])) # Example album ID
+# tracks = get_album_tracks(token, album_id)
+# datafin = search_artist_and_get_tracks("Olivia Rodrigo")
+
+
+# print(albums)
+datafin = search_artist_and_get_tracks("Olivia Rodrigo")
+
+print(len(datafin["albums"]))
+print(len(datafin["tracks"]))
+print(datafin["tracks"][:5])
