@@ -13,7 +13,7 @@ End-to-end analytics platform for music industry data
 
 ## Architecture
 
-**Music API**
+Music API
     ↓
 Python ETL
     ↓
