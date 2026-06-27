@@ -127,8 +127,8 @@ token = get_token()
 
 
 # print(albums)
-datafin = search_artist_and_get_tracks("Olivia Rodrigo")
+# datafin = search_artist_and_get_tracks("Olivia Rodrigo")
 
-print(len(datafin["albums"]))
-print(len(datafin["tracks"]))
-print(datafin["tracks"][:5])
+# print(len(datafin["albums"]))
+# print(len(datafin["tracks"]))
+# print(datafin["tracks"][:5])
