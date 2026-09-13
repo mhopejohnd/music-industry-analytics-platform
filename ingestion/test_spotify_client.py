@@ -9,9 +9,17 @@ print("\nARTIST:")
 print(artist)
 
 if artist:
-    tracks = spotify.get_album_tracks(
-        albums[0]["spotify_album_id"]
+    albums = spotify.get_artist_albums(
+        artist["spotify_artist_id"]
+    )
 
+    print("\nALBUMS:")
+    for album in albums:
+        print(album)
+
+    if albums:
+        tracks = spotify.get_album_tracks(
+            albums[0]["spotify_album_id"]
         )
     
     print("\nTRACKS:")
