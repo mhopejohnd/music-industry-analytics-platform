@@ -6,7 +6,7 @@ import requests
 
 class SpotifyClient:
     def __init__(self):
-        load_dotenv()
+        load_dotenv()    
 
         self.client_id = os.getenv("CLIENT_ID")
         self.client_secret = os.getenv("CLIENT_SECRET")
@@ -28,7 +28,7 @@ class SpotifyClient:
         url = "https://accounts.spotify.com/api/token"
 
         headers = {
-            "Authrization": "Basic "+ auth_base64,
+            "Authorization": "Basic "+ auth_base64,
             "Content-Type": "application/x-www-form-urlencoded"
         }
 
@@ -40,9 +40,6 @@ class SpotifyClient:
                                    headers = headers,
                                    data = data
                                    )
-        
-        print("Status:", response.status_code)
-        print("Response:", response.text)
 
         response.raise_for_status()
 
@@ -87,20 +84,19 @@ class SpotifyClient:
             return None
         
         artist = artists[0]
-
         return {
             "spotify_artist_id" : artist["id"],
             "artist_name" : artist["name"],
-            "genres" : artist["genres"],
-            "followers": artist["followers"]["total"],
-            "popularity" : artist["popularity"]
+            "genres" : artist.get("genres", []),
+            "followers": artist.get("followers", {}).get("total"),
+            "popularity" : artist.get("popularity", None)
         }
     
 
     def get_artist_albums(self,artist_id):
-        """Get albums and singles for an artidt."""
+        """Get albums and singles for an artist."""
 
-        data = self.get(
+        data = self._get(
             f"artists/{artist_id}/albums",
             params = {
                 "include_groups": "album, single",
